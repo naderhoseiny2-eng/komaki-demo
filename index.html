@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#102c26"><title>کمکی | نسخه نمایشی</title>
+<style>
+:root{font-family:Tahoma,Arial,sans-serif;color:#182b27;background:#f2f6f4}*{box-sizing:border-box}body{margin:0}header{background:#102c26;color:white;padding:22px 16px}header .wrap{max-width:900px;margin:auto}h1{margin:0 0 7px;font-size:29px}header p{margin:0;color:#b9d9ce;font-size:13px}.wrap{max-width:900px;margin:auto;padding:16px}.notice{border:1px solid #e6cf9b;background:#fff9e9;border-radius:12px;padding:12px;line-height:1.9;font-size:13px;margin-bottom:16px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}button{font:inherit;cursor:pointer;border:0;border-radius:10px;padding:11px 15px;background:#e2eae6;color:#17382f}button.active,button.primary{background:#087a59;color:white}button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #75bfa6}.panel{background:white;border-radius:16px;padding:20px;box-shadow:0 5px 25px #183a2b12;margin-bottom:15px}h2{margin:0 0 18px;font-size:20px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}label{display:block;font-size:13px;font-weight:bold;margin-bottom:6px}.field{margin-bottom:13px}input,select,textarea{width:100%;padding:12px;border:1px solid #c9d8d1;border-radius:9px;font:inherit;background:#fff}textarea{min-height:100px;resize:vertical}.muted{color:#647770;font-size:13px;line-height:1.8}.item{border:1px solid #d9e6df;border-radius:12px;padding:14px;margin:12px 0}.item strong{display:block;margin-bottom:8px}.pill{display:inline-block;background:#e4f3ed;color:#176747;border-radius:20px;padding:4px 9px;font-size:12px}.item footer{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-top:12px}small{color:#61766c}#message{min-height:25px;color:#087a59;font-weight:bold}.hidden{display:none!important}@media(max-width:600px){.grid{grid-template-columns:1fr}.panel{padding:15px}}
+</style></head>
+<body>
+<header><div class="wrap"><h1>کمکی <span style="font-size:13px;font-weight:normal">Komaki</span></h1><p>تعمیرات تخصصی و تأمین قطعات سازگار | نسخه نمایشی اولیه</p></div></header>
+<main class="wrap">
+<div class="notice"><b>نسخه نمایشی، نه سرویس عملیاتی.</b> اطلاعات فقط در همین مرورگر ذخیره می‌شوند و بین کاربران مشترک نیستند. لطفاً نام، شماره تماس یا اطلاعات واقعی مشتری وارد نکنید. این نسخه ورود امن، پایگاه داده مرکزی، پرداخت یا تخصیص واقعی ندارد.</div>
+<nav class="tabs" aria-label="بخش‌ها"><button class="active" data-tab="request">ثبت درخواست</button><button data-tab="admin">پنل مدیریت نمایشی</button><button data-tab="tech">نمای تعمیرکار</button></nav>
+<section class="panel" id="request">
+<h2>ثبت درخواست جدید</h2>
+<form id="requestForm">
+<div class="grid"><div class="field"><label for="type">نوع درخواست</label><select id="type"><option value="repair">تعمیر دستگاه</option><option value="part">تأمین قطعه</option></select></div><div class="field"><label for="category">دسته دستگاه</label><select id="category"><option>پرینتر</option><option>دستگاه کپی</option><option>لیبل‌پرینتر</option><option>فیش‌پرینتر</option><option>بارکداسکنر</option><option>پول‌شمار</option><option>سورتر اسکناس</option><option>تست اصالت ارز</option><option>کاغذخردکن</option></select></div></div>
+<div class="grid"><div class="field"><label for="model">برند و مدل دستگاه</label><input id="model" maxlength="100" placeholder="مثلاً HP M402" required></div><div class="field"><label for="city">شهر</label><input id="city" maxlength="70" placeholder="مثلاً تهران" required></div></div>
+<div class="field"><label for="problem">شرح مشکل یا مشخصات قطعه</label><textarea id="problem" maxlength="1200" required placeholder="نشانه‌ها، کد خطا، شماره فنی قطعه..."></textarea></div>
+<button class="primary" type="submit">ثبت آزمایشی درخواست</button><p id="message" role="status"></p>
+</form></section>
+<section class="panel hidden" id="admin"><h2>درخواست‌ها | مدیریت نمایشی</h2><p class="muted">در این نسخه می‌توانید وضعیت درخواست‌های ثبت‌شده روی همین گوشی را تغییر دهید.</p><div id="adminList"></div></section>
+<section class="panel hidden" id="tech"><h2>درخواست‌های قابل مشاهده برای تعمیرکار</h2><p class="muted">اطلاعات تماس مشتری در این نسخه دریافت نمی‌شود. پذیرش واقعی و تخصیص تخصصی در نسخه متصل به سرور اضافه می‌شود.</p><div id="techList"></div></section>
+<p class="muted">کمکی یک برند مستقل است. این نمونه برای بررسی جریان کار است، نه عیب‌یابی ایمن یا ارائه پیشنهاد قطعه بدون تأیید سازگاری.</p>
+</main>
+<script>
+(function(){
+'use strict';
+const key='komaki-demo-v1';
+const statuses=['جدید','در حال بررسی','تخصیص‌یافته','انجام‌شده','لغوشده'];
+let records=[];
+try{const data=JSON.parse(localStorage.getItem(key)||'[]');if(Array.isArray(data))records=data.filter(x=>x&&typeof x==='object')}catch(e){records=[]}
+const $=id=>document.getElementById(id);
+const save=()=>{try{localStorage.setItem(key,JSON.stringify(records))}catch(e){alert('ذخیره در این مرورگر امکان‌پذیر نیست.')}};
+function el(tag,text,cls){const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n}
+function render(){
+for(const target of ['adminList','techList']){
+const box=$(target);box.replaceChildren();
+if(!records.length){box.append(el('p','هنوز درخواستی ثبت نشده است.','muted'));continue}
+records.slice().reverse().forEach(r=>{
+const card=el('article',undefined,'item');
+card.append(el('strong',(r.type==='part'?'درخواست قطعه':'درخواست تعمیر')+' | '+r.category+' | '+r.model));
+card.append(el('p',r.problem));card.append(el('small','شهر: '+r.city+' | شناسه: '+r.id));
+const footer=el('footer');footer.append(el('span',r.status,'pill'));
+if(target==='adminList'){
+const select=el('select');select.setAttribute('aria-label','تغییر وضعیت درخواست '+r.id);
+statuses.forEach(s=>{const o=el('option',s);o.value=s;o.selected=r.status===s;select.append(o)});
+select.style.maxWidth='190px';
+select.addEventListener('change',()=>{r.status=select.value;save();render()});footer.append(select)
+}card.append(footer);box.append(card)
+})
+}
+}
+document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>{
+document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x===b));
+for(const id of ['request','admin','tech'])$(id).classList.toggle('hidden',id!==b.dataset.tab);
+render()
+}));
+$('requestForm').addEventListener('submit',e=>{
+e.preventDefault();
+const r={id:'K-'+Date.now().toString(36).toUpperCase(),type:$('type').value,category:$('category').value,model:$('model').value.trim(),city:$('city').value.trim(),problem:$('problem').value.trim(),status:'جدید'};
+if(!r.model||!r.city||!r.problem)return;
+records.push(r);save();$('requestForm').reset();$('message').textContent='درخواست نمایشی با شناسه '+r.id+' ثبت شد.';render()
+});
+render();
+})();
+</script></body></html>
